@@ -1,0 +1,40 @@
+/**
+ * JavaCC template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
+ */PARSER_BEGIN(Examen)
+public class Examen{
+
+ 
+    public static void main(String args []) throws ParseException  {
+        Examen parser = new Examen(System.in);    while (true)    {      System.out.println("Reading from standard input...");      System.out.print("Enter an expression like \"1+(2+3)*4;\" :");      try      {        Examen.one_line();              }      catch (Exception e)      {        System.out.println("NOK.");        System.out.println(e.getMessage());        Examen.ReInit(System.in);      }      catch (Error e)      {        System.out.println("Oops.");        System.out.println(e.getMessage());        break;      }    }  }}PARSER_END(Examen)SKIP :{  " "| "\r"| "\t"| "\n"}TOKEN : /* OPERATORS */{  < PLUS : "+" >
+| < PARA : "(" >
+| < PARC : ")" >}TOKEN :{  < CONSTANT : (< DIGIT >)+ >| < #DIGIT : [ "0"-"9" ] >}void one_line() :{
+int resultado=0;
+  }{
+  (     resultado= sum() ";" | ";"
+) {
+ 		System.out.println("Resultado " +resultado);
+
+  }  }int sum() :{
+int numero1 =0;
+int numero2 =0;
+
+  }{  numero1 =term()  (    (      < PLUS >     )   numero2= term()  )* 
+    
+	{
+	  
+	return numero1+numero2;
+}
+  }int term() :{
+ int val =0;
+ Token t1;
+ Token t2;
+  }{  (   t1= < PARA > val =element() t2= <PARC >
+    )
+    {
+	
+    return val;
+    }}int element() :{
+Token t;
+  }{  (    t=< CONSTANT >) {
+		return Integer.parseInt(t.image);
+    }}
