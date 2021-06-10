@@ -7,7 +7,8 @@ public class Examen{
     public static void main(String args []) throws ParseException  {
         Examen parser = new Examen(System.in);    while (true)    {      System.out.println("Reading from standard input...");      System.out.print("Enter an expression like \"1+(2+3)*4;\" :");      try      {        Examen.one_line();              }      catch (Exception e)      {        System.out.println("NOK.");        System.out.println(e.getMessage());        Examen.ReInit(System.in);      }      catch (Error e)      {        System.out.println("Oops.");        System.out.println(e.getMessage());        break;      }    }  }}PARSER_END(Examen)SKIP :{  " "| "\r"| "\t"| "\n"}TOKEN : /* OPERATORS */{  < PLUS : "+" >
 | < PARA : "(" >
-| < PARC : ")" >}TOKEN :{  < CONSTANT : (< DIGIT >)+ >| < #DIGIT : [ "0"-"9" ] >}void one_line() :{
+| < PARC : ")" >
+|  < COMA : "," >}TOKEN :{  < CONSTANT : (< DIGIT >)+ >| < #DIGIT : [ "0"-"9" ] >}void one_line() :{
 int resultado=0;
   }{
   (     resultado= sum() ";" | ";"
@@ -15,8 +16,9 @@ int resultado=0;
  		System.out.println("Resultado " +resultado);
 
   }  }int sum() :{
-int numero1 =0;
-int numero2 =0;
+  List<Integer> numero1 = new ArrayList<Integer >();
+  List<Integer> numero2 = new ArrayList<Integer >();
+
 
   }{  numero1 =term()  (    (      < PLUS >     )   numero2= term()  )* 
     
@@ -26,15 +28,30 @@ int numero2 =0;
 }
   }int term() :{
  int val =0;
- Token t1;
- Token t2;
-  }{  (   t1= < PARA > val =element() t2= <PARC >
+
+ List<Integer> elementos = new ArrayList<Integer >();
+  }{  (   < PARA >
+
+    val =element() {
+	elementos.add(val);
+    }
+
+    (
+		< COMA >
+	val =element() { elementos.add(val); }
+		
+          )*
+
+      <PARC >
+
+    
     )
     {
 	
     return val;
     }}int element() :{
 Token t;
+
   }{  (    t=< CONSTANT >) {
 		return Integer.parseInt(t.image);
     }}
