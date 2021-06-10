@@ -1,7 +1,10 @@
 /**
  * JavaCC template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
- */PARSER_BEGIN(Examen)
+ */PARSER_BEGIN(Examen)import java.util.ArrayList;
+import java.util.List;
 public class Examen{
+
+  
 
  
     public static void main(String args []) throws ParseException  {
@@ -9,13 +12,13 @@ public class Examen{
 | < PARA : "(" >
 | < PARC : ")" >
 |  < COMA : "," >}TOKEN :{  < CONSTANT : (< DIGIT >)+ >| < #DIGIT : [ "0"-"9" ] >}void one_line() :{
-int resultado=0;
+List<Integer> resultado= new ArrayList<Integer >();
   }{
   (     resultado= sum() ";" | ";"
 ) {
  		System.out.println("Resultado " +resultado);
 
-  }  }int sum() :{
+  }  }List<Integer > sum() :{
   List<Integer> numero1 = new ArrayList<Integer >();
   List<Integer> numero2 = new ArrayList<Integer >();
 
@@ -24,9 +27,9 @@ int resultado=0;
     
 	{
 	  
-	return numero1+numero2;
+	return  Stream.concat(numero1.stream(), numero2.stream()).collect(Collectors.toList());
 }
-  }int term() :{
+  }List<Integer > term() :{
  int val =0;
 
  List<Integer> elementos = new ArrayList<Integer >();
@@ -48,7 +51,7 @@ int resultado=0;
     )
     {
 	
-    return val;
+    return elementos;
     }}int element() :{
 Token t;
 
